@@ -1,16 +1,18 @@
 import dotenv from "dotenv";
-import { Client, Intents } from "discord.js";
+import { Client, Intents, Collection } from "discord.js";
 import path from "path";
 import axios from "axios";
 import express from "express";
 import herokuAwake from "heroku-awake";
 dotenv.config({ path: path.join(__dirname, "./.env") });
+import { clientInterFace } from "./interface";
+import handler from "./handlers/commands";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const server = express();
- const url = "https://chat-bot-discord-bihuynhthi.herokuapp.com/";
+const url = "https://chat-bot-discord-bihuynhthi.herokuapp.com/";
 const bot = (): void => {
-  const client = new Client({
+  const client: clientInterFace = new Client({
     intents: [
       Intents.FLAGS.GUILDS,
       Intents.FLAGS.GUILD_MESSAGES,
@@ -25,37 +27,23 @@ const bot = (): void => {
     console.log(`Logged in as ${client.user?.tag}!`);
   });
 
+  client.commands = new Collection();
+  client.aliases = new Collection();
+  ["commands"].forEach((han) => {
+    handler(client);
+  });
   client.on("message", async (message) => {
-    const messageData = String(message.content.toLocaleLowerCase());
-    if (messageData === "ping") {
-      message.channel.send("pong");
-    }
-    console.log(messageData.indexOf("!searchgoogle "));
-    if (messageData.indexOf("!searchgoogle ") >= 0) {
-      const messageGoogle = messageData.split(" ").slice(1).join("+");
-      var url = `https://vi.wikipedia.org/w/api.php`;
-
-      var PostInfoGet = (
-        await axios.get(encodeURI(url), {
-          params: {
-            action: "query",
-            list: "search",
-            srsearch: messageGoogle,
-            format: "json",
-          },
-        })
-      ).data;
-      var dataSend = [];
-      for (let index = 0; index < PostInfoGet.query.search.length; index++) {
-        const element = PostInfoGet.query.search[index];
-
-        var tempData = element.title.split(" ").join("_");
-        const urlSend = `https://vi.wikipedia.org/wiki/${tempData}`;
-        dataSend.push(`${element.title} : ${urlSend}`);
-      }
-      console.log(message.channelId);
-      message.channel.send(dataSend.join("\n"));
-    }
+    if (message.author.bot) return;
+    const prefix = "!";
+    if (!message.content.startsWith(prefix)) return;
+    const args = message.content.slice(prefix.length).trim().split(" ");
+    const cmd = args.shift().toLowerCase();
+    console.log(cmd);
+    if (cmd.length === 0) return;
+    let command = client.commands.get(cmd);
+    if (!command) command = client.commands.get(client.aliases.get(cmd));
+    /// @ts-ignore
+    if (command) command.run(client, message, args);
   });
 
   client.on("interactionCreate", async (interaction) => {
@@ -67,7 +55,7 @@ const bot = (): void => {
   });
 
   client.login(token);
-}
+};
 server.get("/", (req: express.Request, res: express.Response) => {
   return res.status(200).send({
     message: "tritranduc is running",
