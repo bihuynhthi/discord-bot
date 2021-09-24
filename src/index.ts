@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import discord, { Client, Intents,MessageAttachment } from "discord.js";
+import { Client, Intents } from "discord.js";
 import path from "path";
 import axios from "axios";
 dotenv.config({ path: path.join(__dirname, "./.env") });
@@ -14,7 +14,6 @@ const client = new Client({
   ],
 });
 const token = process.env.BOT_KEY;
-
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user?.tag}!`);
