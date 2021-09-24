@@ -22,6 +22,7 @@ const bot = (): void => {
     ],
   });
   const token = process.env.BOT_KEY;
+  console.log(token);
 
   client.on("ready", () => {
     console.log(`Logged in as ${client.user?.tag}!`);
