@@ -15,9 +15,6 @@ const client = new Client({
 });
 const token = process.env.BOT_KEY;
 
-function encode_utf8(s: string) {
-  return unescape(encodeURIComponent(s));
-}
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user?.tag}!`);
