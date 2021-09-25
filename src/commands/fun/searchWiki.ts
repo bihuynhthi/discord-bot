@@ -1,4 +1,4 @@
-import { dataSendAgain } from "../../interface/index";
+import { controllerInterface } from "../../interface/index";
 import { Client, Message } from "discord.js";
 import axios from "axios";
 const searchGoogle = async (searchKey: string) => {
@@ -34,7 +34,7 @@ const searchGoogle = async (searchKey: string) => {
     return "don't have the page you want to watch";
   }
 };
-const dataExportSearchGoogle: dataSendAgain = {
+const dataExportSearchGoogle: controllerInterface = {
   name: "searchWiki",
   category: "fun",
   aliases: ["wiki"],

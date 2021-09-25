@@ -17,9 +17,9 @@ const handler = (client: clientInterFace) => {
       )).default;
       if (pull.name) {
         client.commands.set(pull.name, pull);
-        dataLog.push([file, "done"]);
+        dataLog.push([file, "☑ file status is good"]);
       } else {
-        dataLog.push([file, "thieu name"]);
+        dataLog.push([file, " thieu name"]);
         continue;
       }
       if (pull.aliases && Array.isArray(pull.aliases))

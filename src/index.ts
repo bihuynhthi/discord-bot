@@ -43,7 +43,6 @@ const bot = (): void => {
     if (cmd.length === 0) return;
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
-    /// @ts-ignore
     if (command) command.run(client, message, args);
   });
 
