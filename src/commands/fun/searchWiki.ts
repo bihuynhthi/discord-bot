@@ -27,7 +27,6 @@ const searchGoogle = async (searchKey: string) => {
     const urlSend = `https://vi.wikipedia.org/wiki/${tempData}`;
     dataSend.push(`${element.title} : ${urlSend}`);
   }
-  console.log(dataSend);
   if (dataSend.length >= 1) {
     return dataSend.join("\n");
   } else {
