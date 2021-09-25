@@ -1,4 +1,4 @@
-import { dataSendAgain } from "./../../interface/index";
+import { dataSendAgain } from "../../interface/index";
 import { Client, Message } from "discord.js";
 import axios from "axios";
 const searchGoogle = async (searchKey: string) => {
@@ -35,9 +35,9 @@ const searchGoogle = async (searchKey: string) => {
   }
 };
 const dataExportSearchGoogle: dataSendAgain = {
-  name: "searchGoogle ",
+  name: "searchWiki",
   category: "fun",
-  aliases: ["google"],
+  aliases: ["wiki"],
   run: async (client: Client<boolean>, message: Message, args: string[]) => {
     const searchKey = args.join("+");
     const result = await searchGoogle(searchKey);
