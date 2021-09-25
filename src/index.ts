@@ -7,6 +7,7 @@ import herokuAwake from "heroku-awake";
 dotenv.config({ path: path.join(__dirname, "./.env") });
 import { clientInterFace } from "./interface";
 import handler from "./handlers/commands";
+import checkForbiddenWordFun from "./utils/checkWord";
 
 const port = process.env.PORT || 4000;
 const server = express();
@@ -20,7 +21,6 @@ const bot = (): void => {
     ],
   });
   const token = process.env.BOT_KEY;
-  console.log(token);
 
   client.on("ready", () => {
     console.log(`Logged in as ${client.user?.tag}!`);
@@ -32,12 +32,17 @@ const bot = (): void => {
     handler(client);
   });
   client.on("message", async (message) => {
+    if (checkForbiddenWordFun(message.content)) {
+      if (message.deletable) {
+        message.delete();
+      }
+      return;
+    }
     if (message.author.bot) return;
     const prefix = "!";
     if (!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).trim().split(" ");
     const cmd = args.shift().toLowerCase();
-    console.log(cmd);
     if (cmd.length === 0) return;
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
