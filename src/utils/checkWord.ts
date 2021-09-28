@@ -9,13 +9,16 @@ const checkSingerWord = (word: string) => {
       result = true;
     }
   }
+  if (word === "") {
+    result = false;
+  }
   return result;
 };
 
 const checkForbiddenWordFun = (stringWord: string): boolean => {
   const key = stringWord.toLowerCase().split(/[~`!@#$%^&*()_.-]/g);
   var dataTemp = key.filter(checkSingerWord);
-  console.log(dataTemp,key);
+  // console.log(dataTemp, key);
   if (dataTemp.length >= 1) {
     return true;
   } else {
